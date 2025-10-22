@@ -20,15 +20,8 @@
 #include "keymap_uk.h"
 
 /*
-     To test:
-     - UK keycodes
-     - the "feel" of the board compared with my regular charybdis
-     - pointer layer on raise+lower
-
      TODO: 
-     - Replicate personal keymap
      - UK keycodes
-     - Try to (artificially) raise DPI
      - Lower default scroll DPI
      - Set up adjust/ pointer layer 
 */
@@ -43,8 +36,13 @@ enum dilemma_keymap_layers {
 // Automatically enable sniping-mode on the pointer layer.
 // #define DILEMMA_AUTO_SNIPING_ON_LAYER LAYER_POINTER
 
-#define LOWER MO(LAYER_LOWER)
-#define RAISE MO(LAYER_RAISE)
+// Tri layer stuff
+#define TRI_LAYER_LOWER_LAYER 1
+#define TRI_LAYER_UPPER_LAYER	2
+#define TRI_LAYER_ADJUST_LAYER 3
+
+// #define LOWER MO(LAYER_LOWER)
+// #define RAISE MO(LAYER_RAISE)
 #define PT_Z LT(LAYER_POINTER, UK_Z)
 #define PT_SLSH LT(LAYER_POINTER, UK_SLSH)
 
@@ -67,7 +65,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        KC_LSFT,   PT_Z,    UK_X,    UK_C,    UK_V,    UK_B,       UK_N,    UK_M, UK_COMM,  UK_DOT, PT_SLSH, DRGSCRL,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                         KC_LCTL, KC_LGUI,  LOWER,  KC_SPC,      KC_ENT,  RAISE, KC_BSPC,  KC_MPLY
+                         KC_LCTL, KC_LGUI,TL_LOWR,  KC_SPC,      KC_ENT,TL_UPPR, KC_BSPC, KC_MPLY
   //                    ╰───────────────────────────────────╯ ╰───────────────────────────────────╯
   ),
 
@@ -150,31 +148,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //////////////////////////////////
 // Custom functions
 //////////////////////////////////
-// Hacky way to force pointer layer on raise and lower
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-     switch (keycode) {
-          case LOWER:
-               if (record->event.pressed) {
-                    layer_on(LAYER_LOWER);
-                    update_tri_layer(LAYER_LOWER, LAYER_RAISE, LAYER_POINTER);
-               } else {
-                    layer_off(LAYER_LOWER);
-                    update_tri_layer(LAYER_LOWER, LAYER_RAISE, LAYER_POINTER);
-               }
-               return false;
 
-          case RAISE:
-               if (record->event.pressed) {
-                    layer_on(LAYER_RAISE);
-                    update_tri_layer(LAYER_LOWER, LAYER_RAISE, LAYER_POINTER);
-               } else {
-                    layer_off(LAYER_RAISE);
-                    update_tri_layer(LAYER_LOWER, LAYER_RAISE, LAYER_POINTER);
-               }
-               return false;
-     }
-     return true;
-}
 
 //////////////////////////////////
 
