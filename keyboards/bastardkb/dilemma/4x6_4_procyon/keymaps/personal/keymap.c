@@ -29,7 +29,7 @@ enum dilemma_keymap_layers {
 // mouse specific define overrides 
 // normal mouse
 #define Dilemma_MINIMUM_DEFAULT_DPI 150  // default is 400, this makes it more tolerable
-#define Dilemma_DEFAULT_DPI_CONFIG_STEP 50  // default is 200
+#define Dilemma_DEFAULT_DPI_CONFIG_STEP 200  // default is 200
 // sniping
 #define DILEMMA_MINIMUM_SNIPING_DPI 200  // default is also 200
 #define DILEMMA_SNIPING_DPI_CONFIG_STEP 100  // default is also 100
@@ -140,7 +140,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,DPI_RMOD,S_D_RMOD,    XXXXXXX, KC_KP_1, KC_KP_2, KC_KP_3, _______, _______,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, _______, DRGSCRL, SNIPING, EE_CLR,  QK_BOOT,    _______, KC_KP_0, XXXXXXX,KC_KP_DOT,_______, _______,
+       XXXXXXX, _______, DRG_TOG, SNIPING,  EE_CLR, QK_BOOT,    _______, KC_KP_0, XXXXXXX,KC_KP_DOT,_______, _______,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                          KC_BTN4, KC_BTN3, KC_BTN2, KC_BTN1,    KC_BTN3, KC_BTN1, KC_BTN2, XXXXXXX
   //                    ╰───────────────────────────────────╯ ╰───────────────────────────────────╯
