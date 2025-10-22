@@ -67,7 +67,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        KC_LSFT,   PT_Z,    UK_X,    UK_C,    UK_V,    UK_B,       UK_N,    UK_M, UK_COMM,  UK_DOT, PT_SLSH, DRGSCRL,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                         KC_LCTL, KC_LGUI,  KC_SPC,   LOWER,      RAISE,  KC_ENT, KC_DEL,  KC_MPLY
+                         KC_LCTL, KC_LGUI,  LOWER,  KC_SPC,      KC_ENT,  RAISE, KC_BSPC,  KC_MPLY
   //                    ╰───────────────────────────────────╯ ╰───────────────────────────────────╯
   ),
 
@@ -82,7 +82,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        _______, UK_EQL,  UK_MINS, UK_PLUS, UK_LCBR, UK_RCBR,    UK_LBRC, UK_RBRC, UK_SCLN, UK_COLN, UK_BSLS, KC_RSFT,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                         _______, XXXXXXX, XXXXXXX, _______,    XXXXXXX, _______, XXXXXXX, XXXXXXX
+                         _______, XXXXXXX, _______, XXXXXXX,    _______, XXXXXXX, KC_DEL, XXXXXXX
   //                    ╰───────────────────────────────────╯ ╰───────────────────────────────────╯
   ),
 
@@ -90,13 +90,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
        _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,      KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F11,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       _______,  KC_INS,  KC_PSCR, KC_APP, _______, _______,    KC_PGUP, _______, KC_UP,   _______, _______,  KC_F12, 
+       _______,  KC_INS,  KC_PSCR, KC_APP, _______, _______,    KC_PGUP, XXXXXXX, KC_UP,   XXXXXXX, XXXXXXX,  KC_F12, 
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       _______, KC_LALT, KC_LCTL, KC_LSFT, _______, _______,    KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL,  _______, 
+       _______, KC_LALT, KC_LCTL, KC_LSFT, _______, _______,    KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL,  XXXXXXX, 
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       KC_CAPS, KC_UNDO, KC_CUT,  KC_COPY, KC_PASTE,_______,    _______, KC_HOME, _______, KC_END,  _______, _______, 
+       KC_CAPS, KC_UNDO, KC_CUT,  KC_COPY, KC_PASTE,_______,    XXXXXXX, KC_HOME, XXXXXXX, KC_END,  _______, _______, 
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                         _______, KC_LALT, _______, XXXXXXX,    _______, XXXXXXX, XXXXXXX, XXXXXXX
+                         _______, KC_LALT, XXXXXXX, _______,    XXXXXXX, _______, XXXXXXX, XXXXXXX
   //                    ╰───────────────────────────────────╯ ╰───────────────────────────────────╯
   ),
 
@@ -150,31 +150,42 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //////////////////////////////////
 // Custom functions
 //////////////////////////////////
-// This adjusts the existing dilemma stuff, so it set so that lets me do multi-button for enabling pointer layer.
-layer_state_t layer_state_set_user(layer_state_t state) {
-    // Apply tri-layer logic first
-    state = update_tri_layer_state(state, LAYER_LOWER, LAYER_RAISE, LAYER_POINTER);
+// Hacky way to force pointer layer on raise and lower
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+     switch (keycode) {
+          case LOWER:
+               if (record->event.pressed) {
+                    layer_on(LAYER_LOWER);
+                    update_tri_layer(LAYER_LOWER, LAYER_RAISE, LAYER_POINTER);
+               } else {
+                    layer_off(LAYER_LOWER);
+                    update_tri_layer(LAYER_LOWER, LAYER_RAISE, LAYER_POINTER);
+               }
+               return false;
 
-    // If your firmware supports pointer/sniping toggling, preserve that too
-#ifdef POINTING_DEVICE_ENABLE
-#    ifdef DILEMMA_AUTO_SNIPING_ON_LAYER
-    dilemma_set_pointer_sniping_enabled(layer_state_cmp(state, DILEMMA_AUTO_SNIPING_ON_LAYER));
-#    endif
-#endif
-
-    return state;
+          case RAISE:
+               if (record->event.pressed) {
+                    layer_on(LAYER_RAISE);
+                    update_tri_layer(LAYER_LOWER, LAYER_RAISE, LAYER_POINTER);
+               } else {
+                    layer_off(LAYER_RAISE);
+                    update_tri_layer(LAYER_LOWER, LAYER_RAISE, LAYER_POINTER);
+               }
+               return false;
+     }
+     return true;
 }
 
 //////////////////////////////////
 
-// #ifdef POINTING_DEVICE_ENABLE
-// #    ifdef DILEMMA_AUTO_SNIPING_ON_LAYER
-// layer_state_t layer_state_set_user(layer_state_t state) {
-//     dilemma_set_pointer_sniping_enabled(layer_state_cmp(state, DILEMMA_AUTO_SNIPING_ON_LAYER));
-//     return state;
-// }
-// #    endif // DILEMMA_AUTO_SNIPING_ON_LAYER
-// #endif     // POINTING_DEVICE_ENABLEE
+#ifdef POINTING_DEVICE_ENABLE
+#    ifdef DILEMMA_AUTO_SNIPING_ON_LAYER
+layer_state_t layer_state_set_user(layer_state_t state) {
+    dilemma_set_pointer_sniping_enabled(layer_state_cmp(state, DILEMMA_AUTO_SNIPING_ON_LAYER));
+    return state;
+}
+#    endif // DILEMMA_AUTO_SNIPING_ON_LAYER
+#endif     // POINTING_DEVICE_ENABLEE
 
 #ifdef RGB_MATRIX_ENABLE
 // Forward-declare this helper function since it is defined in rgb_matrix.c.
