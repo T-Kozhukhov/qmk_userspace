@@ -82,7 +82,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        _______, UK_EQL,  UK_MINS, UK_PLUS, UK_LCBR, UK_RCBR,    UK_LBRC, UK_RBRC, UK_SCLN, UK_COLN, UK_BSLS, KC_RSFT,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                         XXXXXXX, XXXXXXX, XXXXXXX, _______,    XXXXXXX, _______, XXXXXXX, XXXXXXX
+                         _______, XXXXXXX, XXXXXXX, _______,    XXXXXXX, _______, XXXXXXX, XXXXXXX
   //                    ╰───────────────────────────────────╯ ╰───────────────────────────────────╯
   ),
 
@@ -96,7 +96,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        KC_CAPS, KC_UNDO, KC_CUT,  KC_COPY, KC_PASTE,_______,    _______, KC_HOME, _______, KC_END,  _______, _______, 
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                         XXXXXXX, KC_LALT, _______, XXXXXXX,    _______, XXXXXXX, XXXXXXX, XXXXXXX
+                         _______, KC_LALT, _______, XXXXXXX,    _______, XXXXXXX, XXXXXXX, XXXXXXX
   //                    ╰───────────────────────────────────╯ ╰───────────────────────────────────╯
   ),
 
@@ -150,19 +150,31 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //////////////////////////////////
 // Custom functions
 //////////////////////////////////
-// This lets it set so that lets me do multi-button for enabling pointer layer.
+// This adjusts the existing dilemma stuff, so it set so that lets me do multi-button for enabling pointer layer.
 layer_state_t layer_state_set_user(layer_state_t state) {
-    return update_tri_layer_state(state, LAYER_LOWER, LAYER_RAISE, LAYER_POINTER);
-}
+    // Apply tri-layer logic first
+    state = update_tri_layer_state(state, LAYER_LOWER, LAYER_RAISE, LAYER_POINTER);
 
+    // If your firmware supports pointer/sniping toggling, preserve that too
 #ifdef POINTING_DEVICE_ENABLE
 #    ifdef DILEMMA_AUTO_SNIPING_ON_LAYER
-layer_state_t layer_state_set_user(layer_state_t state) {
     dilemma_set_pointer_sniping_enabled(layer_state_cmp(state, DILEMMA_AUTO_SNIPING_ON_LAYER));
+#    endif
+#endif
+
     return state;
 }
-#    endif // DILEMMA_AUTO_SNIPING_ON_LAYER
-#endif     // POINTING_DEVICE_ENABLEE
+
+//////////////////////////////////
+
+// #ifdef POINTING_DEVICE_ENABLE
+// #    ifdef DILEMMA_AUTO_SNIPING_ON_LAYER
+// layer_state_t layer_state_set_user(layer_state_t state) {
+//     dilemma_set_pointer_sniping_enabled(layer_state_cmp(state, DILEMMA_AUTO_SNIPING_ON_LAYER));
+//     return state;
+// }
+// #    endif // DILEMMA_AUTO_SNIPING_ON_LAYER
+// #endif     // POINTING_DEVICE_ENABLEE
 
 #ifdef RGB_MATRIX_ENABLE
 // Forward-declare this helper function since it is defined in rgb_matrix.c.
