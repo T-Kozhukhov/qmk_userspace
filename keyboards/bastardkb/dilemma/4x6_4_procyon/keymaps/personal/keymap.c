@@ -42,12 +42,16 @@ enum dilemma_keymap_layers {
 // scroll
 #define DILEMMA_DRAGSCROLL_DPI 200  // default is 100
 
+// colour specific overrides
+#define LAYER_INDICATOR_BRIGHTNESS_INC 11  // default is 22
+#define CAPSLOCK_INDICATOR_BRIGHTNESS_INC 38  // default is 76
+
 // Automatically enable sniping-mode on the pointer layer.
 // #define DILEMMA_AUTO_SNIPING_ON_LAYER LAYER_POINTER
 
 #define LOWER MO(LAYER_LOWER)
 #define RAISE MO(LAYER_RAISE)
-#define POINT M0(LAYER_POINTER)   /// HACK: Can do tri-layer shenanigans by carefully placing this. see keymap.
+#define POINT MO(LAYER_POINTER)   /// HACK: Can do tri-layer shenanigans by carefully placing this. see keymap.
 #define PT_Z LT(LAYER_POINTER, UK_Z)
 #define PT_SLSH LT(LAYER_POINTER, UK_SLSH)
 
