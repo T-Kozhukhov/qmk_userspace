@@ -19,12 +19,6 @@
 
 #include "keymap_uk.h"
 
-/*
-     TODO: 
-     - Lower default scroll DPI
-     - Lower DPI
-*/
-
 enum dilemma_keymap_layers {
     LAYER_BASE = 0,
     LAYER_LOWER,
@@ -146,7 +140,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,DPI_RMOD,S_D_RMOD,    XXXXXXX, KC_KP_1, KC_KP_2, KC_KP_3, _______, _______,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, _______, DRGSCRL, SNIPING, EE_CLR,  QK_BOOT,    _______, KC_KP_0, XXXXXXX,KC_KP_DOT,_______,   RESET,
+       XXXXXXX, _______, DRGSCRL, SNIPING, EE_CLR,  QK_BOOT,    _______, KC_KP_0, XXXXXXX,KC_KP_DOT,_______, _______,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                          KC_BTN4, KC_BTN3, KC_BTN2, KC_BTN1,    KC_BTN3, KC_BTN1, KC_BTN2, XXXXXXX
   //                    ╰───────────────────────────────────╯ ╰───────────────────────────────────╯
