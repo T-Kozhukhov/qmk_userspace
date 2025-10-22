@@ -21,4 +21,6 @@
 #define SPLIT_LAYER_STATE_ENABLE
 #define SPLIT_LED_STATE_ENABLE
 
+#define TAPPING_TERM 500  // how long to hold LT(...) keys before they activate
+
 #define ENCODER_RESOLUTION 4

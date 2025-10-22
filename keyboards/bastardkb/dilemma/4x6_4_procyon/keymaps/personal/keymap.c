@@ -21,9 +21,8 @@
 
 /*
      TODO: 
-     - UK keycodes
      - Lower default scroll DPI
-     - Set up adjust/ pointer layer 
+     - Lower DPI
 */
 
 enum dilemma_keymap_layers {
@@ -33,16 +32,22 @@ enum dilemma_keymap_layers {
     LAYER_POINTER,
 };
 
+// mouse specific define overrides 
+// normal mouse
+#define Dilemma_MINIMUM_DEFAULT_DPI 150  // default is 400, this makes it more tolerable
+#define Dilemma_DEFAULT_DPI_CONFIG_STEP 50  // default is 200
+// sniping
+#define DILEMMA_MINIMUM_SNIPING_DPI 200  // default is also 200
+#define DILEMMA_SNIPING_DPI_CONFIG_STEP 100  // default is also 100
+// scroll
+#define DILEMMA_DRAGSCROLL_DPI 200  // default is 100
+
 // Automatically enable sniping-mode on the pointer layer.
 // #define DILEMMA_AUTO_SNIPING_ON_LAYER LAYER_POINTER
 
-// Tri layer stuff
-#define TRI_LAYER_LOWER_LAYER 1
-#define TRI_LAYER_UPPER_LAYER	2
-#define TRI_LAYER_ADJUST_LAYER 3
-
-// #define LOWER MO(LAYER_LOWER)
-// #define RAISE MO(LAYER_RAISE)
+#define LOWER MO(LAYER_LOWER)
+#define RAISE MO(LAYER_RAISE)
+#define POINT M0(LAYER_POINTER)   /// HACK: Can do tri-layer shenanigans by carefully placing this. see keymap.
 #define PT_Z LT(LAYER_POINTER, UK_Z)
 #define PT_SLSH LT(LAYER_POINTER, UK_SLSH)
 
@@ -65,7 +70,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        KC_LSFT,   PT_Z,    UK_X,    UK_C,    UK_V,    UK_B,       UK_N,    UK_M, UK_COMM,  UK_DOT, PT_SLSH, DRGSCRL,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                         KC_LCTL, KC_LGUI,TL_LOWR,  KC_SPC,      KC_ENT,TL_UPPR, KC_BSPC, KC_MPLY
+                         KC_LCTL, KC_LGUI,  LOWER,  KC_SPC,      KC_ENT,  RAISE, KC_BSPC, KC_MPLY
   //                    ╰───────────────────────────────────╯ ╰───────────────────────────────────╯
   ),
 
@@ -80,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        _______, UK_EQL,  UK_MINS, UK_PLUS, UK_LCBR, UK_RCBR,    UK_LBRC, UK_RBRC, UK_SCLN, UK_COLN, UK_BSLS, KC_RSFT,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                         _______, XXXXXXX, _______, XXXXXXX,    _______, XXXXXXX, KC_DEL, XXXXXXX
+                         _______, XXXXXXX, _______, XXXXXXX,    _______,   POINT, KC_DEL, XXXXXXX
   //                    ╰───────────────────────────────────╯ ╰───────────────────────────────────╯
   ),
 
@@ -94,7 +99,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        KC_CAPS, KC_UNDO, KC_CUT,  KC_COPY, KC_PASTE,_______,    XXXXXXX, KC_HOME, XXXXXXX, KC_END,  _______, _______, 
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                         _______, KC_LALT, XXXXXXX, _______,    XXXXXXX, _______, XXXXXXX, XXXXXXX
+                         _______, KC_LALT,    POINT, _______,    XXXXXXX, _______, XXXXXXX, XXXXXXX
   //                    ╰───────────────────────────────────╯ ╰───────────────────────────────────╯
   ),
 
@@ -131,24 +136,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [LAYER_POINTER] = LAYOUT(
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
-       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX, XXXXXXX, KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX,    XXXXXXX, KC_KP_7, KC_KP_8, KC_KP_9, _______, KC_BSPC,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DPI_MOD, S_D_MOD,    S_D_MOD, DPI_MOD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DPI_MOD, S_D_MOD,    XXXXXXX, KC_KP_4, KC_KP_5, KC_KP_6, _______, _______,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,    XXXXXXX, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, XXXXXXX,
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,DPI_RMOD,S_D_RMOD,    XXXXXXX, KC_KP_1, KC_KP_2, KC_KP_3, _______, _______,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, _______, DRGSCRL, SNIPING, EE_CLR,  QK_BOOT,    QK_BOOT, EE_CLR,  SNIPING, DRGSCRL, _______, XXXXXXX,
+       XXXXXXX, _______, DRGSCRL, SNIPING, EE_CLR,  QK_BOOT,    _______, KC_KP_0, XXXXXXX,KC_KP_DOT,_______,   RESET,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                         XXXXXXX, KC_BTN2, KC_BTN1, KC_BTN3,    KC_BTN3, KC_BTN1, KC_BTN2, XXXXXXX
+                         KC_BTN4, KC_BTN3, KC_BTN2, KC_BTN1,    KC_BTN3, KC_BTN1, KC_BTN2, XXXXXXX
   //                    ╰───────────────────────────────────╯ ╰───────────────────────────────────╯
   ),
 };
 // clang-format on
-
-//////////////////////////////////
-// Custom functions
-//////////////////////////////////
-
 
 //////////////////////////////////
 
