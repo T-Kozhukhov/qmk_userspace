@@ -28,7 +28,7 @@ enum dilemma_keymap_layers {
 
 // mouse specific define overrides 
 // normal mouse
-#define Dilemma_MINIMUM_DEFAULT_DPI 100  // default is 400, this makes it more tolerable
+#define Dilemma_MINIMUM_DEFAULT_DPI 800  // default is 400, this makes it more tolerable
 #define Dilemma_DEFAULT_DPI_CONFIG_STEP 10  // default is 200
 // sniping
 #define DILEMMA_MINIMUM_SNIPING_DPI 200  // default is also 200
